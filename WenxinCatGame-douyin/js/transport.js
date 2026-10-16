@@ -1,0 +1,7 @@
+const config=require('../config');
+const KEY='douyin-session-v1';let pending=null;
+function endpoint(){const url=config.apiBaseURL.replace(/\/$/,'');if(!/^https:\/\/[^/]+/.test(url))throw Error('抖音版后端尚未配置，请先填写 HTTPS 服务地址');return url;}
+function request(data,token){return new Promise((resolve,reject)=>tt.request({url:endpoint(),method:'POST',timeout:55000,header:{'content-type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},data,success:r=>{if(r.statusCode===401)return reject(Object.assign(Error('登录已过期'),{code:'SESSION_EXPIRED'}));if(r.statusCode!==200)return reject(Error('小屋服务暂时不可用，请稍后重试'));resolve(r.data);},fail:()=>reject(Error('没有连上小屋，请检查网络'))}));}
+async function session(){const old=tt.getStorageSync(KEY);if(old&&old.expiresAt>Date.now()+60000)return old.token;if(pending)return pending;pending=(async()=>{endpoint();const login=await new Promise((resolve,reject)=>tt.login({force:true,success:resolve,fail:()=>reject(Error('抖音登录失败，请重试'))}));if(!login.code)throw Error('没有获取到抖音登录凭证');const r=await request({method:'login',code:login.code});if(!r||!r.ok||!r.data||!r.data.token)throw Error(r&&r.error&&r.error.message||'登录失败');tt.setStorageSync(KEY,r.data);return r.data.token;})().finally(()=>{pending=null;});return pending;}
+async function call(event){try{return await request(event,await session());}catch(e){if(e.code!=='SESSION_EXPIRED')throw e;tt.removeStorageSync(KEY);return request(event,await session());}}
+module.exports={call};
