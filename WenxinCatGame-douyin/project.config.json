@@ -1,0 +1,35 @@
+{
+  "description": "温馨猫小屋 · 休闲养猫小游戏",
+  "appid": "ttd124a7994f5df64502",
+  "projectname": "温馨猫小屋抖音版",
+  "compileType": "game",
+  "setting": {
+    "es6": true,
+    "minified": true,
+    "urlCheck": true
+  },
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "cloudfunctions"
+      },
+      {
+        "type": "folder",
+        "value": "tests"
+      },
+      {
+        "type": "folder",
+        "value": "tools"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "folder",
+        "value": "server"
+      }
+    ]
+  }
+}
