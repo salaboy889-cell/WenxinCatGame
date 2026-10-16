@@ -1,0 +1,12 @@
+{
+  "name": "wenxin-douyin-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "private": true,
+  "dependencies": {
+    "wx-server-sdk": "3.0.5-beta.1"
+  },
+  "scripts": {
+    "start": "node server.js"
+  }
+}
